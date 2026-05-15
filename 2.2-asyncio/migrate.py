@@ -2,7 +2,10 @@ import asyncpg
 import asyncio
 from config import DB_CONFIG
 
+
 async def create_table():
+    # Устанавливаем соединение с базой данных
+    # Используем отдельное соединение (не пул), т.к. это одноразовая операция DDL
     conn = await asyncpg.connect(**DB_CONFIG)
     try:
         await conn.execute('''
@@ -20,7 +23,9 @@ async def create_table():
         ''')
         print("Таблица успешно создана")
     finally:
+        # Гарантируем закрытие соединения даже при ошибках
         await conn.close()
+
 
 if __name__ == '__main__':
     asyncio.run(create_table())

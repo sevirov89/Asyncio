@@ -4,6 +4,7 @@ from config import DB_CONFIG
 
 
 async def check_data():
+    # Устанавливаем соединение для проверки загруженных данных
     conn = await asyncpg.connect(**DB_CONFIG)
     try:
         # Проверка количества записей
@@ -12,9 +13,9 @@ async def check_data():
 
         # Проверка нескольких случайных записей
         records = await conn.fetch('''
-            SELECT id, name, gender, mass 
+            SELECT id, name, gender, mass
             FROM star_wars_people
-            ORDER BY RANDOM() 
+            ORDER BY RANDOM()
             LIMIT 5
         ''')
 
@@ -24,7 +25,7 @@ async def check_data():
 
         # Проверка конкретного персонажа
         luke = await conn.fetchrow('''
-            SELECT * FROM star_wars_people 
+            SELECT * FROM star_wars_people
             WHERE name = 'Luke Skywalker'
         ''')
 
@@ -35,6 +36,7 @@ async def check_data():
             print("Люк Скайуокер не найден в базе")
 
     finally:
+        # Корректное закрытие соединения
         await conn.close()
 
 
